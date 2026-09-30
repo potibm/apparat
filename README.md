@@ -5,21 +5,13 @@ A set of small, decoupled, single-purpose demoparty management tools.
 Originally built for the [Evoke demoparty](https://www.evoke.eu/) to handle the operational "side quests" that competition-focused systems like [Granola](https://gitlab.com/granola-compo/granola/) intentionally leave out. All tools are open-source, run as Docker containers, and are built with Go and React.
 
 <p align="center">
-  <a href="https://github.com/potibm/kasseapparat">
-    <img src="https://github.com/potibm/kasseapparat/raw/main/docs/kasseapparat.svg" width="120" alt="kasseapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/kasseapparat"><img src="https://github.com/potibm/kasseapparat/raw/main/docs/kasseapparat.svg" width="120" alt="kasseapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/tidsapparat">
-    <img src="https://github.com/potibm/tidsapparat/raw/main/doc/tidsapparat.svg" width="120" alt="tidsapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/tidsapparat"><img src="https://github.com/potibm/tidsapparat/raw/main/doc/tidsapparat.svg" width="120" alt="tidsapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/funkapparat">
-    <img src="https://github.com/potibm/funkapparat/raw/main/doc/funkapparat.svg" width="120" alt="funkapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/funkapparat"><img src="https://github.com/potibm/funkapparat/raw/main/doc/funkapparat.svg" width="120" alt="funkapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/billedapparat">
-    <img src="https://github.com/potibm/billedapparat/raw/main/doc/billedapparat.svg" width="120" alt="billedapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/billedapparat"><img src="https://github.com/potibm/billedapparat/raw/main/doc/billedapparat.svg" width="120" alt="billedapparat logo" /></a>
 </p>
 
 ## 📦 The Tools
@@ -34,26 +26,47 @@ Originally built for the [Evoke demoparty](https://www.evoke.eu/) to handle the 
 
 The Apparat suite relies on decoupling. There is no central monolithic database. Instead, the tools communicate asynchronously via Redis. `tidsapparat` and `funkapparat` publish their updates, and `billedapparat` subscribes to them.
 
+For party visitors there are two read paths: `billedapparat` serves a public display UI, where the beamer pulls its playlists and configuration over HTTP and receives live slide updates over an SSE stream, while `tidsapparat` and `funkapparat` can additionally export their data to an S3 bucket. The beamer that drives the hall screens is just a browser on a machine in the organizer area — the big screens only mirror its output. Visitors fetch the exported files directly with a calendar client, an RSS reader or a simple web page — optionally served through a CDN in front of the bucket (e.g. CloudFront, as used at Evoke).
+
 To keep the services lean, there is **no built-in user management**. Authentication and routing should be handled externally via a reverse proxy (like Traefik) and an OIDC provider.
 
 ```mermaid
 graph TD
     User([Party Organizer]) --> Traefik
-    
+    Visitor([Party Visitor]) --> Traefik
+    Visitor -->|Calendar, RSS, Web| S3
+    Visitor -->|Watches| Screens
+    Beamer -->|Beamer UI| Traefik
+
     subgraph Infrastructure
         Traefik[Reverse Proxy<br>Traefik + OIDC]
         Redis[(Redis)]
+        S3[(S3 Bucket)]
+    end
+
+    subgraph Organizer Area
+        Beamer[Beamer<br>Browser in organizer area]
+    end
+
+    subgraph Hall
+        Screens[Big Screens]
     end
 
     subgraph The Apparat Suite
         Traefik -->|Admin UI| K[kasseapparat]
         Traefik -->|Admin UI| T[tidsapparat]
         Traefik -->|Admin UI| F[funkapparat]
-        Traefik -->|Display UI| B[billedapparat]
-        
+        Traefik -->|Admin UI| B[billedapparat]
+        Traefik -->|Beamer UI| B
+
         T -.->|Publishes events via protokolapparat| Redis
         F -.->|Publishes news via protokolapparat| Redis
         Redis -.->|Subscribes| B
+        B -->|Config + Slides via HTTP and SSE| Beamer
+        Beamer -->|Video output| Screens
+
+        T -.->|Exports schedule| S3
+        F -.->|Exports news feeds| S3
     end
 ```
 
