@@ -5,21 +5,13 @@ A set of small, decoupled, single-purpose demoparty management tools.
 Originally built for the [Evoke demoparty](https://www.evoke.eu/) to handle the operational "side quests" that competition-focused systems like [Granola](https://gitlab.com/granola-compo/granola/) intentionally leave out. All tools are open-source, run as Docker containers, and are built with Go and React.
 
 <p align="center">
-  <a href="https://github.com/potibm/kasseapparat">
-    <img src="https://github.com/potibm/kasseapparat/raw/main/docs/kasseapparat.svg" width="120" alt="kasseapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/kasseapparat"><img src="https://github.com/potibm/kasseapparat/raw/main/docs/kasseapparat.svg" width="120" alt="kasseapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/tidsapparat">
-    <img src="https://github.com/potibm/tidsapparat/raw/main/doc/tidsapparat.svg" width="120" alt="tidsapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/tidsapparat"><img src="https://github.com/potibm/tidsapparat/raw/main/doc/tidsapparat.svg" width="120" alt="tidsapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/funkapparat">
-    <img src="https://github.com/potibm/funkapparat/raw/main/doc/funkapparat.svg" width="120" alt="funkapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/funkapparat"><img src="https://github.com/potibm/funkapparat/raw/main/doc/funkapparat.svg" width="120" alt="funkapparat logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://github.com/potibm/billedapparat">
-    <img src="https://github.com/potibm/billedapparat/raw/main/doc/billedapparat.svg" width="120" alt="billedapparat logo" />
-  </a>
+  <a href="https://github.com/potibm/billedapparat"><img src="https://github.com/potibm/billedapparat/raw/main/doc/billedapparat.svg" width="120" alt="billedapparat logo" /></a>
 </p>
 
 ## 📦 The Tools
