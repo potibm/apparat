@@ -22,6 +22,8 @@ Originally built for the [Evoke demoparty](https://www.evoke.eu/) to handle the 
 * **[billedapparat](https://github.com/potibm/billedapparat):** Big-screen display system for the main hall. A central hub rotates slides, while separate collectors feed it with schedules from *tidsapparat*, news from *funkapparat* and posts from social media.
 * **[protokolapparat](https://github.com/potibm/protokolapparat):** The shared glue. It defines the protocol and data structures used to exchange news and events between *tidsapparat*, *funkapparat*, and *billedapparat* via Redis Streams.
 
+Every tool works on its own — use one, some or all of them. Combined, they simply add up: for example, `billedapparat` shows the live timetable on the big screens as soon as `tidsapparat` is running.
+
 ## 🏗️ Architecture & Interaction
 
 The Apparat suite relies on decoupling. There is no central monolithic database — each tool keeps its own SQLite database. Where tools need to talk to each other, they do so asynchronously via Redis Streams: `tidsapparat` and `funkapparat` append their updates to a stream, and `billedapparat` reads them through a consumer group.
