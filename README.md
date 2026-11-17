@@ -37,7 +37,7 @@ For party visitors there are two read paths: the beamer pulls its playlists and 
 
 To keep the services lean, there is **no built-in user management**. Login is delegated to an external OIDC provider (e.g. Dex or Keycloak); `kasseapparat` can alternatively trust a user header set by a ForwardAuth middleware in the proxy. Routing and TLS are handled by a reverse proxy like Traefik.
 
-> 🤯 **Looks wild? It isn't.** Organizers edit things in a few small web apps. `tidsapparat` and `funkapparat` hand their data to Redis and S3, `billedapparat` collects everything and puts it on the big screens, and `kasseapparat` simply runs the entrance desk. The diagram just shows every wire at once.
+> 🤯 **Looks wild? It isn't.** Organizers edit things in a few small web apps. `tidsapparat` and `funkapparat` hand their data to Redis and S3, `billedapparat` collects everything and puts it on the big screens, and `kasseapparat` simply runs the entrance desk. The diagram just shows every wire at once. And you don't need all of it: every tool works on its own, so pick just the parts your party needs.
 
 ```mermaid
 flowchart TB
