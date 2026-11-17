@@ -93,6 +93,7 @@ flowchart TB
     K -->|"arrival notifications"| SES
     SES -->|"E-Mail"| Orga
     K <-->|"payments + webhook"| SumUp
+    Orga -->|"uses card terminals"| SumUp
 
     %% timetable & news
     T -->|"XADD schedule"| Redis
