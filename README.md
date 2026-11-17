@@ -37,6 +37,8 @@ For party visitors there are two read paths: the beamer pulls its playlists and 
 
 To keep the services lean, there is **no built-in user management**. Login is delegated to an external OIDC provider (e.g. Dex or Keycloak); `kasseapparat` can alternatively trust a user header set by a ForwardAuth middleware in the proxy. Routing and TLS are handled by a reverse proxy like Traefik.
 
+> 🤯 **Looks wild? It isn't.** Organizers edit things in a few small web apps. `tidsapparat` and `funkapparat` hand their data to Redis and S3, `billedapparat` collects everything and puts it on the big screens, and `kasseapparat` simply runs the entrance desk. The diagram just shows every wire at once.
+
 ```mermaid
 flowchart TB
     Orga([Party Organizer])
@@ -54,6 +56,7 @@ flowchart TB
 
         subgraph BA["billedapparat"]
             Hub["Hub<br>Admin API · Config · SSE"]
+            Beamer["Beamer<br>frontend on /beamer,<br>browser in organizer area"]
             subgraph Collectors["Collectors · billedapparat collect &lt;source&gt;"]
                 CNews["news"]
                 CTime["timetable"]
@@ -71,10 +74,6 @@ flowchart TB
         SES["Amazon SES<br>SMTP"]
         SumUp["SumUp API<br>card terminals"]
         Social["Bluesky · Mastodon · Discord<br>Twitch · Pouet"]
-    end
-
-    subgraph OrgaArea["Organizer Area"]
-        Beamer["Beamer<br>Browser on /beamer"]
     end
 
     subgraph Hall["Hall"]
@@ -110,7 +109,7 @@ flowchart TB
     classDef app fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
     classDef ext fill:#fef3c7,stroke:#d97706,color:#78350f
     classDef store fill:#dcfce7,stroke:#16a34a,color:#14532d
-    class K,T,F,Hub,CNews,CTime,CSocial app
+    class K,T,F,Hub,Beamer,CNews,CTime,CSocial app
     class SES,SumUp,Social ext
     class Redis,S3 store
 ```
